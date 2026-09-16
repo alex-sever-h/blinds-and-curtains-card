@@ -1,0 +1,28 @@
+Blinds and Curtains Card
+Copyright 2026 Alexandru-Sever Horin
+
+This product includes software developed as "Lovelace Blind Card Enhanced"
+by flect41 (https://github.com/flect41/lovelace-blind-card-enhanced),
+which is itself derived from "Blind Card" by tungmeister
+(https://github.com/tungmeister/hass-blind-card).
+
+Licensed under the Apache License, Version 2.0.
+
+Modifications made in this fork, relative to
+flect41/lovelace-blind-card-enhanced 0.1.0:
+
+  - Added a `motion` option giving covers a real direction of travel
+    (rtl, ltr, center, down). The upstream card always moves the sheet
+    downward; its `style` option only changes the decorative window drawn
+    behind it.
+  - Added horizontal geometry: track metrics measured across the width,
+    sheet anchored to the parked edge, pointer tracking on the X axis.
+  - Added a second sheet and a second drag handle so centre-opening
+    curtains can be dragged from either side.
+  - Added window backgrounds: double_window, triple_window, window_door.
+  - Made the picture fluid (width:100% with a per-style max-width) instead
+    of a fixed pixel width, which overflowed narrow dashboard columns.
+  - Removed the pull cord; the sheet edge is the drag handle.
+  - Hid the decorative centre handle nubs on the room visuals.
+  - Button icons now follow the configured motion.
+  - Renamed the custom element to `blinds-and-curtains-card`.

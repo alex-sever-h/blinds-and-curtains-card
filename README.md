@@ -1,137 +1,115 @@
-# Lovelace Blind Card Enhanced
+# Blinds and Curtains Card
 
-![HACS](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)
-
-A modern, highly visual blind control card for Home Assistant.
+A visual cover control card for Home Assistant. Blinds roll down, curtains slide
+sideways, and each cover is drawn over a window that can be shaped to match the
+real one.
 
 ![Preview](images/blinds-preview.png)
 
-This is a fork of the original Blind Card by [tungmeister](https://github.com/tungmeister/hass-blind-card), extended with improved visuals, drag control, and additional configuration options.
+Fork of [Lovelace Blind Card Enhanced](https://github.com/flect41/lovelace-blind-card-enhanced)
+by flect41, itself a fork of [Blind Card](https://github.com/tungmeister/hass-blind-card)
+by tungmeister.
 
-![Demo](images/blinds-demo.gif)
+The upstream card always moves the sheet downward — its `style` option changes
+only the picture drawn behind an always-vertical blind. This fork gives covers a
+real direction of travel, which is what a curtain needs.
 
 ---
 
 ## Features
 
-- Drag-to-set blind position with live percentage preview
-- Smooth, physically accurate blind animation
-- Optional pull cord interaction
-- Multiple visual styles: roller, single door, split window, and sliding windows
-- Invert position and/or commands
-- Custom blind and pull cord colours
-- Button and drag control combined
-- Available from the default HACS repository list
-
----
-
-## Configuration
-
-### General
-
-| Name | Required | Description |
-|------|----------|-------------|
-| type | Yes | Must be `custom:lovelace-blind-card-enhanced` |
-| title | No | Title of the card |
-
----
-
-### Entities
-
-| Name | Required | Default | Description |
-|------|----------|---------|-------------|
-| entity | Yes | - | Cover entity ID |
-| name | No | Friendly name | Display name |
-| buttons_position | No | `left` | `left` or `right` |
-| title_position | No | `top` | `top` or `bottom` |
-| invert_percentage | No | `false` | Invert percentage logic |
-| invert_commands | No | `false` | Flip up/down button commands |
-| blind_color | No | `#4a4a4a` | Blind colour |
-| pull_color | No | `#d8d8d8` | Pull cord colour |
-| style | No | `roller` | Visual style |
-| show_pull | No | `true` | Show pull cord |
-
----
-
-## Styles
-
-Supported style values:
-
-- `roller`
-- `single_door`
-- `split_window`
-- `sliding_left`
-- `sliding_right`
-
-Use the `style` option per entity to change the visual representation.
-
----
-
-## Example
-
-```yaml
-type: custom:lovelace-blind-card-enhanced
-title: Blinds
-entities:
-  - entity: cover.study_blind
-    name: Study
-    style: single_door
-    blind_color: "#3f3f3f"
-    pull_color: "#d8d8d8"
-
-  - entity: cover.lounge_left_blind
-    name: Lounge Left
-    style: sliding_left
-
-  - entity: cover.lounge_right_blind
-    name: Lounge Right
-    style: sliding_right
-```
-
----
+- **Four directions of travel** — down, right-to-left, left-to-right, and
+  centre-opening (two panels meeting in the middle)
+- Drag-to-set position with a live percentage readout; centre-opening curtains
+  can be dragged from either edge
+- Window backgrounds shaped to the real opening: one, two or three panes, or a
+  window-plus-door combination
+- Fluid sizing — the picture fills its card and caps at the style's design width
+- Per-entity colours, inverted percentage and inverted commands
+- Several covers on one card
 
 ## Installation
 
-### HACS
+### HACS (custom repository)
 
-1. Open HACS in Home Assistant
-2. Search for **Lovelace Blind Card Enhanced**
-3. Download the card
-4. Refresh your browser
-
-The card is available in the default HACS repository list. You do not need to add it as a custom repository.
-
----
+1. HACS → three-dot menu → Custom repositories
+2. Add `alex-sever-h/blinds-and-curtains-card`, category **Dashboard**
+3. Install, then hard-refresh the browser
 
 ### Manual
 
-1. Copy `lovelace-blind-card-enhanced.js` into:
+Copy `blinds-and-curtains-card.js` into `config/www/` and add a dashboard
+resource pointing at `/local/blinds-and-curtains-card.js`, type **module**.
 
-```text
-/config/www/
-```
-
-2. Add it to your Lovelace resources:
+## Configuration
 
 ```yaml
-resources:
-  - url: /local/lovelace-blind-card-enhanced.js
-    type: module
+type: custom:blinds-and-curtains-card
+title: Living Room
+entities:
+  - entity: cover.livingroom_blinds
+    name: Blinds
+    style: triple_window
+    motion: down
+  - entity: cover.livingroom_curtains
+    name: Curtains
+    style: triple_window
+    motion: center
 ```
 
-3. Refresh your browser.
+### Card options
 
----
+| option | type | default | description |
+|---|---|---|---|
+| `type` | string | — | `custom:blinds-and-curtains-card` |
+| `entities` | list | — | one entry per cover |
+| `title` | string | — | card header |
 
-## Attribution
+### Per-entity options
 
-This project is based on:  
-https://github.com/tungmeister/hass-blind-card
+| option | type | default | description |
+|---|---|---|---|
+| `entity` | string | — | a `cover.*` entity |
+| `name` | string | friendly name | label shown on the card |
+| `motion` | string | `rtl` | direction of travel — see below |
+| `style` | string | `roller` | window background — see below |
+| `blind_color` | hex | `#4a4a4a` | sheet colour |
+| `buttons_position` | `left`/`right` | `left` | which side the buttons sit on |
+| `title_position` | `top`/`bottom` | `top` | label above or below |
+| `invert_percentage` | bool | `false` | flip the position scale |
+| `invert_commands` | bool | `false` | swap the open and close buttons |
 
-Original concept and base implementation by **tungmeister**.
+### `motion`
 
----
+| value | behaviour |
+|---|---|
+| `down` | vertical, exterior roller — the sheet hangs in front of the whole window, covering the frame |
+| `rtl` | one panel parked right, closing leftward |
+| `ltr` | one panel parked left, closing rightward |
+| `center` | two panels, one from each edge, meeting in the middle; a drag handle on each |
 
-## License
+### `style`
 
-Apache-2.0, same as the original project.
+Added in this fork:
+
+| value | window drawn |
+|---|---|
+| `double_window` | two panes, one mullion |
+| `triple_window` | three panes, two mullions |
+| `window_door` | wide short window left, tall door right, heads aligned |
+
+Inherited from upstream: `roller`, `single_door`, `split_window`,
+`sliding_left`, `sliding_right`.
+
+The background is independent of `motion` — any window shape can be paired with
+any direction of travel.
+
+## Requirements
+
+The cover entity needs `set_cover_position` support (`supported_features` bit 4)
+for the drag handle to do anything. Open, close and stop work regardless.
+
+## Licence
+
+Apache-2.0, inherited from upstream. See `LICENSE`, and `NOTICE` for the list of
+modifications made in this fork.
